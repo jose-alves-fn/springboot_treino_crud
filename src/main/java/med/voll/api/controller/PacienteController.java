@@ -14,30 +14,30 @@ import org.springframework.web.bind.annotation.*;
 public class PacienteController {
 
     @Autowired
-    private PacienteRepository respositorio;
+    private PacienteRepository repositorio;
 
     @PostMapping
     @Transactional
     public void casdastrar(@RequestBody @Valid DadosCadastroPaciente dados) {
-        respositorio.save(new Paciente(dados));
+        repositorio.save(new Paciente(dados));
     }
 
     @GetMapping
     public Page<DadosListagemPaciente> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
-        return respositorio.findAllByAtivoTrue(paginacao).map(DadosListagemPaciente::new);
+        return repositorio.findAllByAtivoTrue(paginacao).map(DadosListagemPaciente::new);
     }
 
     @PutMapping
     @Transactional
     public void atualizar(@RequestBody @Valid DadosAtualizacaoPaciente dados) {
-        var paciente = respositorio.getReferenceById(dados.id());
+        var paciente = repositorio.getReferenceById(dados.id());
         paciente.atualizarInformacoes(dados);
     }
 
     @DeleteMapping("/{id}")
     @Transactional
     public void excluir(@PathVariable Long id) {
-        var paciente = respositorio.getReferenceById(id);
+        var paciente = repositorio.getReferenceById(id);
         paciente.excluir();
     }
 }
